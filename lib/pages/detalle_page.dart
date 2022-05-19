@@ -25,32 +25,10 @@ class BooksDetails extends StatelessWidget {
     );
   }
 
-  Widget _crearAppbar(libro) {
-    return SliverAppBar(
-      elevation: 2.0,
-      backgroundColor: Colors.indigoAccent,
-      expandedHeight: 200,
-      floating: false,
-      pinned: true,
-      flexibleSpace: FlexibleSpaceBar(
-        centerTitle: true,
-        title: Text(
-          '${libro['nombre']}',
-          style: const TextStyle(color: Colors.white, fontSize: 16.0),
-        ),
-        background: FadeInImage(
-          placeholder: const AssetImage('lib/assets/img/loading.gif'),
-          image: NetworkImage(libro['portada']),
-          fadeInDuration: const Duration(milliseconds: 150),
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
 
   Widget _posterTitulo(libro, context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: [
           Hero(

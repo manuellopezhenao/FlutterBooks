@@ -78,6 +78,77 @@ class RegisterBooks extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        // add border
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            color: const Color.fromARGB(255, 150, 144, 144),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            const Text("Portada"),
+                            IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.photo_library_rounded))
+                          ],
+                        ),
+                      )),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Precio',
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Stock',
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Autor',
+                      ),
+                    ),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        // add border
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            color: const Color.fromARGB(255, 150, 144, 144),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            const Text("Autor"),
+                            IconButton(
+                                onPressed: () {}, icon: const Icon(Icons.add))
+                          ],
+                        ),
+                      )),
                 ],
               );
             },

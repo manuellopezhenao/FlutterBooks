@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../provider/book_provider.dart';
 
 class BooksPage extends StatelessWidget {
-  BooksPage({Key? key}) : super(key: key);
+  const BooksPage({Key? key}) : super(key: key);
 
-  final _bookProvider = BooksProvider();
+
 
   @override
   Widget build(BuildContext context) {
+  final _bookProvider = Provider.of<BooksProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Books'),
@@ -26,7 +28,6 @@ class BooksPage extends StatelessWidget {
                         arguments: snapshot.data![index]);
                   },
                   child: Card(
-                    
                     child: Column(
                       children: <Widget>[
                         Row(
@@ -40,7 +41,8 @@ class BooksPage extends StatelessWidget {
                                     snapshot.data![index]['nombre'],
                                     style: const TextStyle(fontSize: 20),
                                   ),
-                                  ...snapshot.data![index]['autor'].map((autor) {
+                                  ...snapshot.data![index]['autor']
+                                      .map((autor) {
                                     return Text(
                                       autor["nombre"],
                                       style: const TextStyle(fontSize: 15),
@@ -52,12 +54,13 @@ class BooksPage extends StatelessWidget {
                             SizedBox(
                               width: 100,
                               height: 100,
-                              child: 
-                              Hero(
+                              child: Hero(
                                 tag: snapshot.data![index]['_id'],
                                 child: FadeInImage(
-                                  image: NetworkImage(snapshot.data![index]['portada']),
-                                  placeholder: const AssetImage('assets/loading.gif'),
+                                  image: NetworkImage(
+                                      snapshot.data![index]['portada']),
+                                  placeholder:
+                                      const AssetImage('assets/loading.gif'),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -72,7 +75,7 @@ class BooksPage extends StatelessWidget {
             );
           } else {
             return const Center(
-              child: CircularProgressIndicator(),
+              child: LinearProgressIndicator(),
             );
           }
         },
