@@ -12,6 +12,12 @@ class BooksPage extends StatelessWidget {
   Widget build(BuildContext context) {
   final _bookProvider = Provider.of<BooksProvider>(context);
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.pushNamed(context, '/register');
+        },
+      ),
       appBar: AppBar(
         title: const Text('Books'),
       ),

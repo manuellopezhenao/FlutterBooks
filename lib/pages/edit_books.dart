@@ -7,11 +7,13 @@ import 'package:provider/provider.dart';
 
 import '../provider/book_provider.dart';
 
-class RegisterBooks extends StatelessWidget {
-  const RegisterBooks({Key? key}) : super(key: key);
+class EditBooks extends StatelessWidget {
+  const EditBooks({Key? key, required this.libro}) : super(key: key);
+  final libro;
 
   @override
   Widget build(BuildContext context) {
+    // Object?  libro = ModalRoute.of(context)?.settings.arguments;
     final _bookProvider = Provider.of<BooksProvider>(context);
 
     return Scaffold(
@@ -39,16 +41,17 @@ class RegisterBooks extends StatelessWidget {
             autores.add(_bookProvider.autoresForm[i]['_id']);
           }
 
-          await Dio().post('http://192.168.1.3:3000/guardarlibro', data: {
-            "isbn": _bookProvider.isbn,
-            "año_publicacion": _bookProvider.anopublicacion,
-            "nombre": _bookProvider.nombre,
-            "editorial": _bookProvider.editorial,
-            "genero": _bookProvider.genero,
-            "sinopsis": _bookProvider.sinopsis,
-            "portada": _bookProvider.portada,
-            "precio": _bookProvider.precio,
-            "stock": _bookProvider.stock,
+          await Dio().put('http://192.168.1.3:3000/actualizarlibro/${libro["_id"]}', data: {
+            // "_id": libro['_id'],
+            "isbn": libro['isbn'],
+            "año_publicacion": libro['año_publicacion'],
+            "nombre": libro['nombre'],
+            "editorial": libro['editorial'],
+            "genero": libro['genero'],
+            "sinopsis": libro['sinopsis'],
+            "portada": libro['portada'],
+            "precio": libro['precio'],
+            "stock": libro['stock'],
             "autor": autores,
           }).then((value) {
             Phoenix.rebirth(context);
@@ -56,7 +59,7 @@ class RegisterBooks extends StatelessWidget {
         },
       ),
       appBar: AppBar(
-        title: const Text('Registro de libros'),
+        title: const Text('Actualizacion de libro'),
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 10),
@@ -69,11 +72,9 @@ class RegisterBooks extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      initialValue: _bookProvider.getisbn != 0
-                          ? _bookProvider.getisbn.toString()
-                          : '',
-                      onChanged: (value) =>
-                          _bookProvider.setisbn = int.parse(value),
+                      initialValue:
+                          libro['isbn'] != 0 ? libro['isbn'].toString() : '',
+                      onChanged: (value) => libro['isbn'] = int.parse(value),
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -84,11 +85,11 @@ class RegisterBooks extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      initialValue: _bookProvider.getanopublicacion != 0
-                          ? "${_bookProvider.getanopublicacion}"
+                      initialValue: libro['año_publicacion'] != 0
+                          ? "${libro['año_publicacion']}"
                           : '',
                       onChanged: (value) =>
-                          _bookProvider.setanopublicacion = int.parse(value),
+                          libro['año_publicacion'] = int.parse(value),
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -99,10 +100,9 @@ class RegisterBooks extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      initialValue: _bookProvider.getnombre != ''
-                          ? _bookProvider.getnombre
-                          : '',
-                      onChanged: (value) => _bookProvider.setnombre = value,
+                      initialValue:
+                          libro['nombre'] != '' ? libro['nombre'] : '',
+                      onChanged: (value) => libro["nombre"] = value,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -113,10 +113,10 @@ class RegisterBooks extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      initialValue: _bookProvider.geteditorial != ''
-                          ? _bookProvider.geteditorial
+                      initialValue: libro["editorial"] != ''
+                          ? libro["editorial"]
                           : '',
-                      onChanged: (value) => _bookProvider.seteditorial = value,
+                      onChanged: (value) => libro["editorial"] = value,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -127,10 +127,9 @@ class RegisterBooks extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      initialValue: _bookProvider.getgenero != ''
-                          ? _bookProvider.getgenero
-                          : '',
-                      onChanged: (value) => _bookProvider.setgenero = value,
+                      initialValue:
+                          libro["genero"] != '' ? libro["genero"] : '',
+                      onChanged: (value) => libro["genero"] = value,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -141,10 +140,9 @@ class RegisterBooks extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      initialValue: _bookProvider.getsinopsis != ''
-                          ? _bookProvider.getsinopsis
-                          : '',
-                      onChanged: (value) => _bookProvider.setsinopsis = value,
+                      initialValue:
+                          libro["sinopsis"] != '' ? libro["sinopsis"] : '',
+                      onChanged: (value) => libro["sinopsis"] = value,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Sinopsis',
@@ -166,13 +164,12 @@ class RegisterBooks extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             const Text("Portada"),
-                            _bookProvider.getportada != ""
+                            libro["portada"] != ""
                                 ? SizedBox(
                                     width: 100,
                                     height: 100,
                                     child: FadeInImage(
-                                      image: NetworkImage(
-                                          _bookProvider.getportada),
+                                      image: NetworkImage(libro["portada"]),
                                       placeholder: const AssetImage(
                                           'assets/loading.gif'),
                                       fit: BoxFit.cover,
@@ -206,8 +203,7 @@ class RegisterBooks extends StatelessWidget {
                                             .then((value) async {
                                           var portada = await _bookProvider
                                               .uploadPortada(value);
-                                          _bookProvider.setportada =
-                                              portada.toString();
+                                          libro["portada"] = portada.toString();
                                           Navigator.pop(context);
                                         });
                                       }).catchError((error) {});
@@ -220,8 +216,8 @@ class RegisterBooks extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      initialValue: _bookProvider.getprecio != ''
-                          ? _bookProvider.getprecio.toString()
+                      initialValue: libro["precio"] != ''
+                          ? libro["precio"].toString()
                           : '',
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
@@ -233,9 +229,8 @@ class RegisterBooks extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      initialValue: _bookProvider.getstock != ''
-                          ? _bookProvider.getstock.toString()
-                          : '',
+                      initialValue:
+                          libro["stock"] != '' ? libro["stock"].toString() : '',
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -304,3 +299,7 @@ Widget cargando(carga) {
         }
       });
 }
+
+
+// crear StatelessWidget que recibe datos
+

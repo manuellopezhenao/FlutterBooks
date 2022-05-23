@@ -1,3 +1,4 @@
+import 'package:books/pages/edit_books.dart';
 import 'package:flutter/material.dart';
 
 class BooksDetails extends StatelessWidget {
@@ -9,6 +10,13 @@ class BooksDetails extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Detalle del libro"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => EditBooks(libro: libro)));
+              },
+              icon: const Icon(Icons.edit))
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 10),
@@ -24,7 +32,6 @@ class BooksDetails extends StatelessWidget {
       ),
     );
   }
-
 
   Widget _posterTitulo(libro, context) {
     return Container(

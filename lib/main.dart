@@ -1,12 +1,14 @@
 import 'package:books/pages/books_page.dart';
 import 'package:books/pages/detalle_page.dart';
+import 'package:books/pages/edit_books.dart';
 import 'package:books/pages/register_books.dart';
 import 'package:books/provider/book_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(Phoenix(child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -16,14 +18,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-            create: (_) => BooksProvider(),
-
+      create: (_) => BooksProvider(),
       child: MaterialApp(
-        initialRoute: '/register',
+        initialRoute: '/',
         routes: {
           '/': (BuildContext context) => const BooksPage(),
           '/detalle': (BuildContext context) => const BooksDetails(),
           "/register": (BuildContext context) => const RegisterBooks(),
+          "/edit": (BuildContext context) => const EditBooks(libro: {},),
         },
         title: 'Flutter Demo',
         theme: ThemeData(
