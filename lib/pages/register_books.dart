@@ -39,7 +39,7 @@ class RegisterBooks extends StatelessWidget {
             autores.add(_bookProvider.autoresForm[i]['_id']);
           }
 
-          await Dio().post('http://192.168.1.3:3000/guardarlibro', data: {
+          await Dio().post('http://192.168.15.98:3000/guardarlibro', data: {
             "isbn": _bookProvider.isbn,
             "año_publicacion": _bookProvider.anopublicacion,
             "nombre": _bookProvider.nombre,
@@ -47,8 +47,8 @@ class RegisterBooks extends StatelessWidget {
             "genero": _bookProvider.genero,
             "sinopsis": _bookProvider.sinopsis,
             "portada": _bookProvider.portada,
-            "precio": _bookProvider.precio,
-            "stock": _bookProvider.stock,
+            "precio": _bookProvider.getprecio,
+            "stock": _bookProvider.getstock,
             "autor": autores,
           }).then((value) {
             Phoenix.rebirth(context);
@@ -220,6 +220,8 @@ class RegisterBooks extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      onChanged: (value) => _bookProvider.setprecio =
+                          value == "" ? 0 : double.parse(value),
                       initialValue: _bookProvider.getprecio != ''
                           ? _bookProvider.getprecio.toString()
                           : '',
@@ -233,6 +235,8 @@ class RegisterBooks extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      onChanged: (value) => _bookProvider.setstock =
+                          value == "" ? 0 : int.parse(value),
                       initialValue: _bookProvider.getstock != ''
                           ? _bookProvider.getstock.toString()
                           : '',

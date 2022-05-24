@@ -6,20 +6,20 @@ import 'package:flutter/material.dart';
 class BooksProvider with ChangeNotifier {
   // obtener todos los libros de la base de datos nodejs
   Future<List> getBooks() async {
-    final response = await Dio().get('http://192.168.1.3:3000/listarlibros');
+    final response = await Dio().get('http://192.168.15.98:3000/listarlibros');
 
     return response.data;
   }
 
   // obtener todos los autores de la base de datos nodejs
   Future<List> getAutores() async {
-    final response = await Dio().get('http://192.168.1.3:3000/listarautores');
+    final response = await Dio().get('http://192.168.15.98:3000/listarautores');
     return response.data;
   }
 
   Future<List> saveAutores(autor) async {
     final response =
-        await Dio().post('http://192.168.1.3:3000/guardarautor', data: autor);
+        await Dio().post('http://192.168.15.98:3000/guardarautor', data: autor);
     return response.data;
   }
 
@@ -75,6 +75,10 @@ class BooksProvider with ChangeNotifier {
   double precio = 0.0;
   int stock = 0;
   String portada = '';
+  String nombreAutor = '';
+  String nacionalidadAutor = '';
+  String fotoUrl = '';
+  int anoNacimientoAutor = 0;
 
   get getportada {
     return portada;
@@ -83,7 +87,7 @@ class BooksProvider with ChangeNotifier {
   uploadPortada(Uint8List portada) async {
     // guardar imagen en la base de datos nodejs
     final response = await Dio()
-        .post('http://192.168.1.3:3000/upload', data: {"portada": portada});
+        .post('http://192.168.15.98:3000/upload', data: {"portada": portada});
 
     return response.data['id'];
   }
@@ -162,6 +166,42 @@ class BooksProvider with ChangeNotifier {
 
   set setstock(int stock) {
     this.stock = stock;
+    notifyListeners();
+  }
+
+  get getnombreAutor {
+    return nombreAutor;
+  }
+
+  set setnombreAutor(String nombreAutor) {
+    this.nombreAutor = nombreAutor;
+    notifyListeners();
+  }
+
+  get getnacionalidadAutor {
+    return nacionalidadAutor;
+  }
+
+  set setnacionalidadAutor(String nacionalidadAutor) {
+    this.nacionalidadAutor = nacionalidadAutor;
+    notifyListeners();
+  }
+
+  get getanoNacimientoAutor {
+    return anoNacimientoAutor;
+  }
+
+  set setanoNacimientoAutor(int anoNacimientoAutor) {
+    this.anoNacimientoAutor = anoNacimientoAutor;
+    notifyListeners();
+  }
+
+  get getfotoUrl {
+    return fotoUrl;
+  }
+
+  set setfotoUrl(String fotoUrl) {
+    this.fotoUrl = fotoUrl;
     notifyListeners();
   }
 }

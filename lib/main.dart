@@ -1,6 +1,7 @@
 import 'package:books/pages/books_page.dart';
 import 'package:books/pages/detalle_page.dart';
 import 'package:books/pages/edit_books.dart';
+import 'package:books/pages/register_autor.dart';
 import 'package:books/pages/register_books.dart';
 import 'package:books/provider/book_provider.dart';
 import 'package:flutter/material.dart';
@@ -20,12 +21,16 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => BooksProvider(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
           '/': (BuildContext context) => const BooksPage(),
           '/detalle': (BuildContext context) => const BooksDetails(),
           "/register": (BuildContext context) => const RegisterBooks(),
-          "/edit": (BuildContext context) => const EditBooks(libro: {},),
+          "/edit": (BuildContext context) => const EditBooks(
+                libro: {},
+              ),
+            "/registerAutor": (BuildContext context) => const RegisterAutor(),
         },
         title: 'Flutter Demo',
         theme: ThemeData(

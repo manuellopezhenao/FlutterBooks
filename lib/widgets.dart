@@ -28,6 +28,10 @@ Widget crearAlerta(
               ],
             );
           }).toList(),
+          ElevatedButton(onPressed: (){
+            Navigator.pop(context);
+            Navigator.pushNamed(context, '/registerAutor');
+          }, child: const Text('Agregar Autor'),),
         ],
       ),
     ),

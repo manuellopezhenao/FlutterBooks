@@ -41,19 +41,21 @@ class EditBooks extends StatelessWidget {
             autores.add(_bookProvider.autoresForm[i]['_id']);
           }
 
-          await Dio().put('http://192.168.1.3:3000/actualizarlibro/${libro["_id"]}', data: {
-            // "_id": libro['_id'],
-            "isbn": libro['isbn'],
-            "año_publicacion": libro['año_publicacion'],
-            "nombre": libro['nombre'],
-            "editorial": libro['editorial'],
-            "genero": libro['genero'],
-            "sinopsis": libro['sinopsis'],
-            "portada": libro['portada'],
-            "precio": libro['precio'],
-            "stock": libro['stock'],
-            "autor": autores,
-          }).then((value) {
+          await Dio().put(
+              'http://192.168.15.98:3000/actualizarlibro/${libro["_id"]}',
+              data: {
+                // "_id": libro['_id'],
+                "isbn": libro['isbn'],
+                "año_publicacion": libro['año_publicacion'],
+                "nombre": libro['nombre'],
+                "editorial": libro['editorial'],
+                "genero": libro['genero'],
+                "sinopsis": libro['sinopsis'],
+                "portada": libro['portada'],
+                "precio": libro['precio'],
+                "stock": libro['stock'],
+                "autor": autores,
+              }).then((value) {
             Phoenix.rebirth(context);
           });
         },
@@ -113,9 +115,8 @@ class EditBooks extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      initialValue: libro["editorial"] != ''
-                          ? libro["editorial"]
-                          : '',
+                      initialValue:
+                          libro["editorial"] != '' ? libro["editorial"] : '',
                       onChanged: (value) => libro["editorial"] = value,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
@@ -216,6 +217,7 @@ class EditBooks extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      onChanged: (value) => libro["precio"] = value == "" ? 0 : double.parse(value),
                       initialValue: libro["precio"] != ''
                           ? libro["precio"].toString()
                           : '',
@@ -229,6 +231,7 @@ class EditBooks extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      onChanged: (value) => libro["stock"] = value == "" ? 0 : int.parse(value),
                       initialValue:
                           libro["stock"] != '' ? libro["stock"].toString() : '',
                       keyboardType: TextInputType.number,
