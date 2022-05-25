@@ -1,3 +1,4 @@
+import 'package:books/search/search_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +18,13 @@ class BooksPage extends StatelessWidget {
         },
       ),
       appBar: AppBar(
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                showSearch(context: context, delegate: DataSearch());
+              }),
+        ],
         title: const Text('Books'),
       ),
       body: FutureBuilder(

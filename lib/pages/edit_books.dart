@@ -1,4 +1,4 @@
-import 'package:books/widgets.dart';
+import 'package:books/widgetsEdit.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -7,19 +7,26 @@ import 'package:provider/provider.dart';
 
 import '../provider/book_provider.dart';
 
-class EditBooks extends StatelessWidget {
+class EditBooks extends StatefulWidget {
   const EditBooks({Key? key, required this.libro}) : super(key: key);
   final libro;
 
   @override
+  State<EditBooks> createState() => _EditBooksState();
+}
+
+class _EditBooksState extends State<EditBooks> {
+  @override
   Widget build(BuildContext context) {
+
     // Object?  libro = ModalRoute.of(context)?.settings.arguments;
     final _bookProvider = Provider.of<BooksProvider>(context);
+    _bookProvider.autoresFormListEdit = widget.libro['autor'];
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.save),
-        onPressed: () async {
+        onPressed: () async { 
           // show dialog loading
           showDialog(
             context: context,
@@ -34,26 +41,29 @@ class EditBooks extends StatelessWidget {
               );
             },
           );
-          //------
+
+
           List autores = [];
 
-          for (var i = 0; i < _bookProvider.autoresForm.length; i++) {
-            autores.add(_bookProvider.autoresForm[i]['_id']);
+          for (var i = 0; i < _bookProvider.getautoresFormListEdit.length; i++) {
+            autores.add(_bookProvider.getautoresFormListEdit[i]['_id']);
           }
 
+          debugPrint(autores.toString());
+
           await Dio().put(
-              'http://192.168.15.98:3000/actualizarlibro/${libro["_id"]}',
+              'http://192.168.15.98:3000/actualizarlibro/${widget.libro["_id"]}',
               data: {
                 // "_id": libro['_id'],
-                "isbn": libro['isbn'],
-                "año_publicacion": libro['año_publicacion'],
-                "nombre": libro['nombre'],
-                "editorial": libro['editorial'],
-                "genero": libro['genero'],
-                "sinopsis": libro['sinopsis'],
-                "portada": libro['portada'],
-                "precio": libro['precio'],
-                "stock": libro['stock'],
+                "isbn": widget.libro['isbn'],
+                "año_publicacion": widget.libro['año_publicacion'],
+                "nombre": widget.libro['nombre'],
+                "editorial": widget.libro['editorial'],
+                "genero": widget.libro['genero'],
+                "sinopsis": widget.libro['sinopsis'],
+                "portada": widget.libro['portada'],
+                "precio": widget.libro['precio'],
+                "stock": widget.libro['stock'],
                 "autor": autores,
               }).then((value) {
             Phoenix.rebirth(context);
@@ -75,8 +85,8 @@ class EditBooks extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       initialValue:
-                          libro['isbn'] != 0 ? libro['isbn'].toString() : '',
-                      onChanged: (value) => libro['isbn'] = int.parse(value),
+                          widget.libro['isbn'] != 0 ? widget.libro['isbn'].toString() : '',
+                      onChanged: (value) => widget.libro['isbn'] = int.parse(value),
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -87,11 +97,11 @@ class EditBooks extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      initialValue: libro['año_publicacion'] != 0
-                          ? "${libro['año_publicacion']}"
+                      initialValue: widget.libro['año_publicacion'] != 0
+                          ? "${widget.libro['año_publicacion']}"
                           : '',
                       onChanged: (value) =>
-                          libro['año_publicacion'] = int.parse(value),
+                          widget.libro['año_publicacion'] = int.parse(value),
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -103,8 +113,8 @@ class EditBooks extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       initialValue:
-                          libro['nombre'] != '' ? libro['nombre'] : '',
-                      onChanged: (value) => libro["nombre"] = value,
+                          widget.libro['nombre'] != '' ? widget.libro['nombre'] : '',
+                      onChanged: (value) => widget.libro["nombre"] = value,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -116,8 +126,8 @@ class EditBooks extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       initialValue:
-                          libro["editorial"] != '' ? libro["editorial"] : '',
-                      onChanged: (value) => libro["editorial"] = value,
+                          widget.libro["editorial"] != '' ? widget.libro["editorial"] : '',
+                      onChanged: (value) => widget.libro["editorial"] = value,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -129,8 +139,8 @@ class EditBooks extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       initialValue:
-                          libro["genero"] != '' ? libro["genero"] : '',
-                      onChanged: (value) => libro["genero"] = value,
+                          widget.libro["genero"] != '' ? widget.libro["genero"] : '',
+                      onChanged: (value) => widget.libro["genero"] = value,
                       keyboardType: TextInputType.text,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -142,8 +152,8 @@ class EditBooks extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       initialValue:
-                          libro["sinopsis"] != '' ? libro["sinopsis"] : '',
-                      onChanged: (value) => libro["sinopsis"] = value,
+                          widget.libro["sinopsis"] != '' ? widget.libro["sinopsis"] : '',
+                      onChanged: (value) => widget.libro["sinopsis"] = value,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Sinopsis',
@@ -165,17 +175,54 @@ class EditBooks extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             const Text("Portada"),
-                            libro["portada"] != ""
-                                ? SizedBox(
-                                    width: 100,
-                                    height: 100,
-                                    child: FadeInImage(
-                                      image: NetworkImage(libro["portada"]),
-                                      placeholder: const AssetImage(
-                                          'assets/loading.gif'),
-                                      fit: BoxFit.cover,
+                            widget.libro["portada"] != ""
+                                ? GestureDetector(
+                                  onTap: () async{
+                                     // show dialog progress
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return const Dialog(
+                                              child: SizedBox(
+                                                height: 100,
+                                                width: 100,
+                                                child: Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
+                                              ),
+                                            );
+                                          });
+
+                                      final ImagePicker _picker = ImagePicker();
+                                      await _picker
+                                          .pickImage(
+                                              source: ImageSource.gallery)
+                                          .then((value) {
+                                        value
+                                            ?.readAsBytes()
+                                            .then((value) async {
+                                          var portada = await _bookProvider
+                                              .uploadPortada(value);
+                                          widget.libro["portada"] = portada.toString();
+                                          setState(() {
+                                            
+                                          });
+                                          Navigator.pop(context);
+                                        });
+                                      }).catchError((error) {});
+                                  },
+                                  child: SizedBox(
+                                      width: 100,
+                                      height: 100,
+                                      child: FadeInImage(
+                                        image: NetworkImage(widget.libro["portada"]),
+                                        placeholder: const AssetImage(
+                                            'assets/loading.gif'),
+                                        fit: BoxFit.cover,
+                                      ),
                                     ),
-                                  )
+                                )
                                 : IconButton(
                                     onPressed: () async {
                                       // show dialog progress
@@ -204,7 +251,7 @@ class EditBooks extends StatelessWidget {
                                             .then((value) async {
                                           var portada = await _bookProvider
                                               .uploadPortada(value);
-                                          libro["portada"] = portada.toString();
+                                          widget.libro["portada"] = portada.toString();
                                           Navigator.pop(context);
                                         });
                                       }).catchError((error) {});
@@ -217,9 +264,9 @@ class EditBooks extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      onChanged: (value) => libro["precio"] = value == "" ? 0 : double.parse(value),
-                      initialValue: libro["precio"] != ''
-                          ? libro["precio"].toString()
+                      onChanged: (value) => widget.libro["precio"] = value == "" ? 0 : double.parse(value),
+                      initialValue: widget.libro["precio"] != ''
+                          ? widget.libro["precio"].toString()
                           : '',
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
@@ -231,9 +278,9 @@ class EditBooks extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      onChanged: (value) => libro["stock"] = value == "" ? 0 : int.parse(value),
+                      onChanged: (value) => widget.libro["stock"] = value == "" ? 0 : int.parse(value),
                       initialValue:
-                          libro["stock"] != '' ? libro["stock"].toString() : '',
+                          widget.libro["stock"] != '' ? widget.libro["stock"].toString() : '',
                       keyboardType: TextInputType.number,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -245,11 +292,10 @@ class EditBooks extends StatelessWidget {
                     padding: EdgeInsets.all(8.0),
                     child: Text('Autores', style: TextStyle(fontSize: 20)),
                   ),
-                  ..._bookProvider.autoresForm.map((autor) {
+                  ..._bookProvider.getautoresFormListEdit.map((autor) {
                     return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
-                          // add border
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(
@@ -263,7 +309,7 @@ class EditBooks extends StatelessWidget {
                               Text("${autor['nombre']}"),
                               IconButton(
                                   onPressed: () {
-                                    _bookProvider.deleteautoresFormList = autor;
+                                    _bookProvider.removeautoresFormList = autor;
                                   },
                                   icon: const Icon(
                                     Icons.delete,
@@ -296,7 +342,7 @@ Widget cargando(carga) {
       future: carga,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
-          return crearAlerta(context, snapshot);
+          return crearAlerta2(context, snapshot);
         } else {
           return const CircularProgressIndicator();
         }

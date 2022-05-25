@@ -23,6 +23,12 @@ class BooksProvider with ChangeNotifier {
     return response.data;
   }
 
+  Future<List> buscarLibroNombre(nombre) async {
+    final response =
+        await Dio().get('http://192.168.15.98:3000/buscarLibroNombre/$nombre');
+    return response.data;
+  }
+
   get autoresList async {
     return await getAutores();
   }
@@ -33,6 +39,18 @@ class BooksProvider with ChangeNotifier {
   }
 
   List autoresForm = [];
+  List autoresFormEdit = [];
+
+  String newPortada = '';
+
+  get getnewPortadaUrl {
+    return newPortada;
+  }
+
+  set setnewPortadaUrl(String newPortada) {
+    newPortada = newPortada;
+    notifyListeners();
+  }
 
   get getautoresFormList {
     return autoresForm;
@@ -43,7 +61,31 @@ class BooksProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  set removeautoresFormList(autor) {
+    autoresFormEdit.remove(autor);
+    notifyListeners();
+  }
+
+  get getautoresFormListEdit {
+    return autoresFormEdit;
+  }
+
+  set autoresFormListEdit(autor) {
+    autoresFormEdit = autor;
+    // notifyListeners();
+  }
+
+  set saveautoresFormListEdit(autor) {
+    autoresFormEdit.add(autor);
+    notifyListeners();
+  }
+
   set deleteautoresFormList(autor) {
+    autoresForm.remove(autor);
+    notifyListeners();
+  }
+
+  set deleteautoresFormListEdit(autor) {
     autoresForm.remove(autor);
     notifyListeners();
   }
@@ -85,10 +127,8 @@ class BooksProvider with ChangeNotifier {
   }
 
   uploadPortada(Uint8List portada) async {
-    // guardar imagen en la base de datos nodejs
     final response = await Dio()
         .post('http://192.168.15.98:3000/upload', data: {"portada": portada});
-
     return response.data['id'];
   }
 

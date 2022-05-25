@@ -39,6 +39,7 @@ class RegisterAutor extends StatelessWidget {
             "año_nacimiento": _bookProvider.getanoNacimientoAutor,
           }).then((value) {
             Navigator.pop(context);
+            Navigator.pop(context);
           });
         },
       ),
